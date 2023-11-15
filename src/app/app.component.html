@@ -1,0 +1,73 @@
+<form style="max-width: 560px; margin-left: auto; margin-right: auto;" [formGroup]="customerDetailForm"
+    (ngSubmit)="onSubmit()">
+    <!-- <div style="display:flex">
+        <input class="form-check-input" id="newIC" type="radio" value="newIC" formControlName="icType" />
+        <label class="form-check-label custom-control-label" for="newIC">NEW IC</label>
+
+
+        <input id="oldIC" type="radio" class="custom-control-input" value="oldIC" formControlName="icType" />
+        <label class="custom-control-label" for="oldIC">UNIFORM PERSONNEL/OLD IC/PASSPORT</label>
+    </div> -->
+
+    <div [hidden]="customerDetailForm.get('icType')?.value == 'oldIC'">
+        <label for="new-ic">NEW IC </label>
+        <input class="form-control" id="new-ic" type="text" formControlName="ic" />
+        <div *ngIf="ic?.invalid && (ic?.dirty || ic?.touched)" class="alert alert-danger">
+            <div *ngIf="ic?.errors?.['required']">New IC is required.</div>
+            <div *ngIf="ic?.errors?.['maxlength']">
+                New IC must be not more than 14 characters long.
+            </div>
+            <div *ngIf="ic?.errors?.['pattern']">
+                New IC format must be YYMMDD-PB-####.
+            </div>
+        </div>
+    </div>
+
+    <!-- <div *ngIf="customerDetailForm.get('icType')?.value != 'newIC'">
+        <label for="old-ic">UNIFORM PERSONNEL/OLD IC/PASSPORT </label>
+        <input id="old-ic" type="text" formControlName="ic" />
+    </div> -->
+
+    <label for="new-ic">Title </label>
+    <select class="form-select" (change)="changeTitle($event)" formControlName="title">
+        <option value="null">Choose your title</option>
+        <option *ngFor="let title of titles" [value]="title">{{ title }}</option>
+    </select>
+
+    <label for="name">CUSTOMER NAME</label>
+    <input class="form-control" id="name" oninput="this.value = this.value.toUpperCase()" type="text"
+        formControlName="name" />
+    <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="alert alert-danger">
+        <div *ngIf="name?.errors?.['required']">Name is required.</div>
+        <div *ngIf="name?.errors?.['maxlength']">
+            Name must be not more than 45 characters long.
+        </div>
+    </div>
+
+    <label for="dob">DOB</label>
+    <input class="form-control" id="dob" [value]="dob" disabled />
+
+    <p>Complete the form to enable button.</p>
+    <button class="btn btn-primary mt-3" type="submit" [disabled]="!customerDetailForm.valid">Submit</button>
+    <button class="btn btn-dark mt-3" type="button" (click)="clearForm()">Cancel</button>
+</form>
+<h2 class="text-center m-5">CUSTOMER DETAILS</h2>
+<table class="w-100">
+    <tr>
+        <th>NEW IC/UNIFORM PERSONNEL/OLD IC/PASSPORT</th>
+        <th>CUSTOMER NAME</th>
+        <th>Action</th>
+    </tr>
+    <tr *ngFor="let item of customers">
+        <td>{{ item.ic }}</td>
+        <td>{{ item.name }}</td>
+        <td><button class="btn btn-primary me-1" (click)="editCustomer(item)">Edit</button>
+            <button class="btn btn-danger" (click)="deleteCustomer(item)">Delete</button>
+        </td>
+    </tr>
+</table>
+<!-- 
+  Copyright Google LLC. All Rights Reserved.
+  Use of this source code is governed by an MIT-style license that
+  can be found in the LICENSE file at https://angular.io/license
+  -->
